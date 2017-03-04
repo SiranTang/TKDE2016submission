@@ -16,7 +16,6 @@ for i = 1:length(source_domains),
     train_data = [train_data; data(ID_old, :)];
 end
 
-% feature selection
 [train_n, train_d] = size(train_data);
 X_train = train_data(:, 2:train_d);
 y = train_data(:, 1);
@@ -27,14 +26,12 @@ loss_type = 'squred_hinge';
 [w_train, feat_ind] = FGM_train(X_train, y, B, C, loss_type);
 feat_ind = unique(feat_ind) + 1;
 
-% new train data
 train_data = [];
 for i = 1:length(source_domains),
     load(sprintf('data/%s', source_domains{i}));
     train_data = [train_data; [data(ID_old, 1), data(ID_old, feat_ind)]];
 end
 
-% net test data
 load(sprintf('data/%s', target_domain));
 test_data = [data(ID_old, 1), data(ID_old, feat_ind)];
 

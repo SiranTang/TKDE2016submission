@@ -79,7 +79,6 @@ for t = 1:length(ID),
         err_count = err_count + 1;
     end
     
-    % precision
     if (hat_y_t > 0),
         predict_positive_count_p = predict_positive_count_p + 1;
         
@@ -100,7 +99,6 @@ for t = 1:length(ID),
         end
     end
     
-    % recall
     if (Y(id) > 0),
         total_positive_count = total_positive_count + 1;
         
@@ -169,7 +167,10 @@ accuracy = 1 - err_count/t;
 precision = TP / (TP + FP);
 recall = TP / (TP + FN);
 F_measure = 2 * precision * recall / (precision + recall);
-MCC = (TP * TN - FP * FN) / sqrt((TP + FP) * (TP + FN) * (TN * FP) * (TN + FN));
+N = TP + TN + FP + FN;
+S = (TP + FN) / N;
+P = (TP + FP) / N;
+MCC = (TP/N - S*P) / sqrt(P * S * (1 - P) * (1 - S));
 
 classifier.numSV = numSV;
 classifier.w1 = w_temp;
